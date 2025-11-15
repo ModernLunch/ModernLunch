@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Homepage – Lunch Package</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background: linear-gradient(135deg, #fceabb, #f8b500); 
+            margin: 0; 
+            padding: 0; 
+            color: #333; 
+        }
+        header { 
+            background: #ff6f61; 
+            color: white; 
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 5px solid #c0392b; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        header img { 
+            width: 120px; 
+            height: auto; 
+            margin-bottom: 10px; 
+            object-fit: contain; 
+        }
+        .lang-select { margin-top: 10px; }
+        .lang-select button {
+            background: white;
+            color: #ff6f61;
+            border: none;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
+        }
+        .lang-select button:hover {
+            background: #ff6f61;
+            color: white;
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 30px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); 
+            transition: transform 0.5s, opacity 0.5s; 
+        }
+        h2 { color: #ff6f61; }
+        form input, form select { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: 2px solid #ff6f61; 
+            border-radius: 12px; 
+        }
+        .question-block { margin-bottom: 20px; }
+        .question-block label { font-weight: bold; }
+        button.submit-btn { 
+            background: #ff6f61; 
+            color: white; 
+            padding: 14px 24px; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            transition: background 0.3s, transform 0.2s; 
+        }
+        button.submit-btn:hover { background: #c0392b; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="HAK TAK Logo" />
+        <h1 id="title">Lunch Package – Übungsfirma</h1>
+        <p id="subtitle">🎉 Bestellseite für den Tag der offenen Tür 🎉</p>
+        <div class="lang-select">
+            <button onclick="setLanguage('de')">Deutsch</button>
+            <button onclick="setLanguage('sl')">Slovenščina</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2 id="form-title">Bestellung</h2>
+        <form id="order-form">
+            <div class="question-block">
+                <label id="label-name" for="name">Name</label>
+                <input type="text" id="name" placeholder="Dein Name" required>
+            </div>
+            <div class="question-block">
+                <label id="label-package" for="package">Lunch Package wählen</label>
+                <select id="package" required>
+                    <option value="classic">Classic</option>
+                    <option value="veggie">Vegetarisch</option>
+                    <option value="vegan">Vegan</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn" id="submit-btn">Bestellen</button>
+        </form>
+    </div>
+
+    <script>
+        const texts = {
+            de: {
+                title: "Lunch Package – Übungsfirma",
+                subtitle: "🎉 Bestellseite für den Tag der offenen Tür 🎉",
+                formTitle: "Bestellung",
+                labelName: "Name",
+                namePlaceholder: "Dein Name",
+                labelPackage: "Lunch Package wählen",
+                submitBtn: "Bestellen",
+                packageOptions: ["Classic", "Vegetarisch", "Vegan"]
+            },
+            sl: {
+                title: "Lunch Paket – Vadbeni podjetje",
+                subtitle: "🎉 Naročilna stran za dan odprtih vrat 🎉",
+                formTitle: "Naročilo",
+                labelName: "Ime",
+                namePlaceholder: "Tvoje ime",
+                labelPackage: "Izberite paket kosila",
+                submitBtn: "Naroči",
+                packageOptions: ["Classic", "Vegetarijansko", "Vegansko"]
+            }
+        };
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.getElementById('title').innerText = texts[lang].title;
+            document.getElementById('subtitle').innerText = texts[lang].subtitle;
+            document.getElementById('form-title').innerText = texts[lang].formTitle;
+            document.getElementById('label-name').innerText = texts[lang].labelName;
+            document.getElementById('name').placeholder = texts[lang].namePlaceholder;
+            document.getElementById('label-package').innerText = texts[lang].labelPackage;
+
+            const select = document.getElementById('package');
+            select.innerHTML = '';
+            texts[lang].packageOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option.toLowerCase();
+                opt.textContent = option;
+                select.appendChild(opt);
+            });
+
+            document.getElementById('submit-btn').innerText = texts[lang].submitBtn;
+        }
+    </script>
+</body>
+</html>
