@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lunch Package – Übungsfirma</title>
+
+    <!-- Schriftarten & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #fceabb, #f8b500);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #ff6f61;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid #c0392b;
+        }
+        header img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .lang-select button {
+            background: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #ff6f61;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            transition: 0.5s;
+        }
+        .hide {
+            opacity: 0;
+            transform: translateY(50px);
+            pointer-events: none;
+        }
+        h2 {
+            color: #ff6f61;
+            margin-top: 0;
+        }
+        form input, form select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ff6f61;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+        button {
+            background: #ff6f61;
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #c0392b;
+        }
+        .question-block {
+            margin-bottom: 20px;
+        }
+        @media (max-width: 600px) {
+            header img { width: 120px; }
+            .container { margin: 15px; padding: 20px; }
+            button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo.png" alt="HAK TAK Logo" />
+    <h1 id="title">Lunch Package – Übungsfirma</h1>
+    <p id="subtitle">🎉 Bestellseite für den Tag der offenen Tür 🎉</p>
+    <div class="lang-select">
+        <button onclick="setLanguage('de')">Deutsch</button>
+        <button onclick="setLanguage('sl')">Slovenščina</button>
+    </div>
+</header>
+
+<div class="container" id="intro">
+    <h2 id="introTitle">🥪 Jausenpakete bestellen</h2>
+    <p id="introText">Wähle dein Lieblingspaket und fülle das Bestellformular aus!</p>
+</div>
+
+<div class="container" id="orderForm">
+    <h2 id="formTitle">📝 Bestellformular</h2>
+    <form id="form">
+        <label for="name" id="nameLabel">Name:</label>
+        <input id="name" type="text" name="name" required>
+
+        <label for="email" id="emailLabel">E-Mail Adresse:</label>
+        <input id="email" type="email" name="email" required>
+
+        <label for="package" id="packageLabel">Jausenpaket wählen:</label>
+        <select id="package" name="package" required>
+            <option value="">Bitte wählen...</option>
+            <option value="Classic">🥖 Classic</option>
+            <option value="Fitness">💪 Fitness</option>
+            <option value="Süß & Knackig">🍩 Süß & Knackig</option>
+        </select>
+
+        <label for="menge" id="quantityLabel">Menge / Količina:</label>
+        <input id="menge" type="number" name="menge" min="1" required>
+
+        <button type="button" id="nextBtn" onclick="goToQuestions()">Weiter / Naprej</button>
+    </form>
+</div>
+
+<div class="container hide" id="questions">
+    <h2 id="questionsTitle">❓ Wirtschaftsfragen</h2>
+    <p id="questionsText">Bitte beantworte die drei Fragen mit Ja oder Nein.</p>
+
+    <div class="question-block">
+        <label id="q1Label">1. Ist Angebot und Nachfrage wichtig für die Preisbildung?</label><br>
+        <input type="radio" name="q1" value="Ja"> Ja
+        <input type="radio" name="q1" value="Nein"> Nein
+    </div>
+
+    <div class="question-block">
+        <label id="q2Label">2. Ist Wasser ein kostenloses Gut?</label><br>
+        <input type="radio" name="q2" value="Ja"> Ja
+        <input type="radio" name="q2" value="Nein"> Nein
+    </div>
+
+    <div class="question-block">
+        <label id="q3Label">3. Ist Arbeitsteilung wichtig?</label><br>
+        <input type="radio" name="q3" value="Ja"> Ja
+        <input type="radio" name="q3" value="Nein"> Nein
+    </div>
+
+    <button onclick="submitAll()" id="submitBtn">Bestellung abschließen</button>
+</div>
+
+<div class="container hide" id="confirmation">
+    <h2 id="confirmTitle">✅ Bestätigung</h2>
+    <p id="confirmText"></p>
+    <div id="qrcode" style="margin-top:20px; text-align:center;"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const translations = {
+    sl: {
+        title: 'Lunch Package – Vaja podjetje',
+        subtitle: '🎉 Stran za naročila 🎉',
+        introTitle: '🥪 Naročanje malic',
+        introText: 'Izberi svojo najljubšo malico!',
+        formTitle: '📝 Obrazec za naročilo',
+        nameLabel: 'Ime:',
+        emailLabel: 'E-poštni naslov:',
+        packageLabel: 'Izberi malico:',
+        quantityLabel: 'Količina:',
+        nextBtn: 'Naprej',
+        questionsTitle: '❓ Gospodarska vprašanja',
+        questionsText: 'Odgovori na vsa vprašanja.',
+        q1Label: '1. Ali ponudba in povpraševanje določata ceno?',
+        q2Label: '2. Ali je voda brezplačno dobro?',
+        q3Label: '3. Ali delitev dela poveča učinkovitost?',
+        submitBtn: 'Zaključi naročilo',
+        confirmTitle: 'Potrditev'
+    }
+};
+
+function setLanguage(lang) {
+    if (lang === 'sl') {
+        for (const key in translations.sl) {
+            if (document.getElementById(key)) {
+                document.getElementById(key).innerText = translations.sl[key];
+            }
+        }
+        document.getElementById("nextBtn").innerText = translations.sl.nextBtn;
+        document.getElementById("submitBtn").innerText = translations.sl.submitBtn;
+    } else {
+        location.reload();
+    }
+}
+
+function goToQuestions() {
+    let form = document.getElementById("form");
+    if (!form.reportValidity()) return;
+    document.getElementById("orderForm").classList.add("hide");
+    setTimeout(() => {
+        document.getElementById("questions").classList.remove("hide");
+    }, 500);
+}
+
+function submitAll() {
+    // Validierung der Fragen
+    if (![...document.querySelectorAll('input[name="q1"]:checked')].length ||
+        ![...document.querySelectorAll('input[name="q2"]:checked')].length ||
+        ![...document.querySelectorAll('input[name="q3"]:checked')].length) {
+        alert("Bitte alle Fragen beantworten!");
+        return;
+    }
+
+    let name = document.querySelector('input[name="name"]').value;
+    let email = document.querySelector('input[name="email"]').value;
+    let paket = document.querySelector('select[name="package"]').value;
+    let menge = document.querySelector('input[name="menge"]').value;
+
+    document.getElementById("questions").classList.add("hide");
+    setTimeout(() => {
+        document.getElementById("confirmation").classList.remove("hide");
+    }, 500);
+
+    document.getElementById("confirmText").innerHTML =
+        `Vielen Dank, <b>${name}</b>! 🎉<br>
+         Deine Bestellung <b>${menge} × ${paket}</b> wurde gespeichert.<br>
+         Eine Bestätigung wurde an <b>${email}</b> gesendet.`;
+
+    // QR-Code generieren
+    document.getElementById("qrcode").innerHTML = "";
+    new QRCode(document.getElementById("qrcode"), {
+        text: `Bestellung: ${name}, ${menge} × ${paket}`,
+        width: 180,
+        height: 180
+    });
+}
+</script>
+</body>
+</html>
